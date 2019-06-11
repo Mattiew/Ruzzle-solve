@@ -7,7 +7,7 @@ Created on Tue Jun 11 15:31:51 2019
 
 import socket
 
-hote = "localhost" 
+hote = "localhost" #mettre "192.168.0.23"
 port = 12800
 
 connexion_avec_serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
