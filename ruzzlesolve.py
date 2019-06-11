@@ -5,6 +5,8 @@ import os
 from copy import copy
 from time import time
 
+
+
 #%%on defini la classe grid
 
 class grid:
@@ -161,115 +163,117 @@ class grid:
     def modify(self,pos,car):
         self.letters[pos[0]][pos[1]]=car
        
-#%%on commence par creer un grille de jeu et on d"clare les variables utiles      
-game  = grid()
-game.setLetter('a','c','l','s','a','s','o','r','b','t','a','q','e','u','t','i')
-game.setpoint()
-
-#on ouvre le dictionnaire et on extrait les données
-os.chdir('C:\\Users\\matth_000\\Desktop\\ruzzle_solve')
-dico=open("out.txt","r")
-word=dico.read()
-liste=word.split('\n')
-dico.close()
-
-
-top=time() #debut chrono
-wordingrid=[] #mots dans la grille et leurs infos
-nbmot=len(liste) #nombre de mots dans le dico a tester
-compt=0 #nombre de mots testés
-k2=0 #variable tampon
-
-#liste pour faire des test
-#'e','r','t','e','o','u','s','r','p','n','e','l','n','m','a','m'
-
-
-#%%Resolution de la grille
-
-for currentword in liste:
+#%%on commence par creer un grille de jeu et on d"clare les variables utiles 'D:\\Documents\\Ruzzle-solve-master'
+def solve(path):
+    game  = grid()
+    game.setLetter('a','c','l','s','a','s','o','r','b','t','a','q','e','u','u','i')
+    game.setpoint()
     
-    game.setLetter('a','c','l','s','a','s','o','r','b','t','a','q','e','u','t','i') #c'est vhiant il faudrait poutot faire une copie
-    compt+=1
+    #on ouvre le dictionnaire et on extrait les données
+    os.chdir(path)
+    dico=open("dico.txt","r")
+    word=dico.read()
+    liste=word.split('\n')
+    dico.close()
     
-#permet l'affichage de la progression
-    k1=k2
-    k2=round(100*compt/nbmot)
-    if k1!=k2:
-        print(k2)
+    
+    top=time() #debut chrono
+    wordingrid=[] #mots dans la grille et leurs infos
+    nbmot=len(liste) #nombre de mots dans le dico a tester
+    compt=0 #nombre de mots testés
+    k2=0 #variable tampon
+    
+    #liste pour faire des test
+    #'e','r','t','e','o','u','s','r','p','n','e','l','n','m','a','m'
+    
+    
+    
+    for currentword in liste:
         
-    isingrid = 1
-    n=0
-    N= len(currentword)
-    letterpos = game.pos(currentword[n])
-    
-    
-    if letterpos==[]:
-        isingrid=0
+        game.setLetter('a','c','l','s','a','s','o','r','b','t','a','q','e','u','u','i') #c'est vhiant il faudrait poutot faire une copie
+        compt+=1
         
-    for position in letterpos:
-        copygame = copy( game)
-        nextpos=position
-        trace=[]
-        while isingrid:
-#        print('tag2')
-            trace.append(nextpos)
-            copygame.modify(nextpos,'done')
+    #permet l'affichage de la progression
+        k1=k2
+        k2=round(10*compt/nbmot)*10
+        if k1!=k2:
+            print(k2)
             
-            lettrevoisine = game.voisin(nextpos)
-            n+=1
-            if n==N:
-                    
-                    
-                    worddata=[currentword,trace]
-                    s=0
-                    for p in trace:
-                        s+=game.point[p[0]][p[1]]
-                    if n>5:
-                        s+=0
-                    elif n ==5:
-                        s+=5
-                    elif n==6:
-                        s+=10
-                    elif n==7:
-                        s+=15
-                    elif n==8:
-                        s+=20
-                    elif n>=9:
-                        s+=25
-                    
-                    
-                    sl = s/len(trace)
-                    
-                    worddata.append(s)
-                    worddata.append(sl)
-                    
-                    lwig= len(wordingrid)
-                    i=0
-                    
-                    if lwig ==0:
-                        wordingrid.append(worddata)
+        isingrid = 1
+        n=0
+        N= len(currentword)
+        letterpos = game.pos(currentword[n])
+        
+        
+        if letterpos==[]:
+            isingrid=0
+            
+        for position in letterpos:
+            copygame = copy(game)
+            nextpos=position
+            trace=[]
+            while isingrid:
+    #        print('tag2')
+                trace.append(nextpos)
+                copygame.modify(nextpos,'done')
                 
-                    while i < lwig:
-                        if wordingrid[i][3] > sl:
-                            i+=1
-                        else:
-                            wordingrid.insert(i,worddata)
-                            i=lwig
+                lettrevoisine = game.voisin(nextpos)
+                n+=1
+                if n==N:
                         
-                    isingrid=0
+                        
+                        worddata=[currentword,trace]
+                        s=0
+                        for p in trace:
+                            s+=game.point[p[0]][p[1]]
+                        if n>5:
+                            s+=0
+                        elif n ==5:
+                            s+=5
+                        elif n==6:
+                            s+=10
+                        elif n==7:
+                            s+=15
+                        elif n==8:
+                            s+=20
+                        elif n>=9:
+                            s+=25
+                        
+                        
+                        sl = s/len(trace)
+                        
+                        worddata.append(s)
+                        worddata.append(sl)
+                        
+                        lwig= len(wordingrid)
+                        i=0
+                        
+                        if lwig ==0:
+                            wordingrid.append(worddata)
+                    
+                        while i < lwig:
+                            if wordingrid[i][3] > sl:
+                                i+=1
+                            else:
+                                wordingrid.insert(i,worddata)
+                                i=lwig
+                            
+                        isingrid=0
+                        
+                        
+                elif currentword[n].lower() in lettrevoisine[0]:
+                    nextind = lettrevoisine[0].index(currentword[n].lower())
+                    nextpos = lettrevoisine[1][nextind]
                     
                     
-            elif currentword[n].lower() in lettrevoisine[0]:
-                nextind = lettrevoisine[0].index(currentword[n].lower())
-                nextpos = lettrevoisine[1][nextind]
+                    
                 
-                
-                
+                else:
+                    isingrid = 0
+                    
             
-            else:
-                isingrid = 0
-                
-        
+    print(time()-top)
+    return wordingrid    
 
 
 
