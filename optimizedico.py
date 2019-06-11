@@ -6,16 +6,19 @@ Created on Fri May 24 17:20:49 2019
 """
 import os
 
-os.chdir('Z:\\Config\\Bureau\\Ruzzle solve')
+os.chdir('D:\Documents\Ruzzle-solve-master')
 source=open('out.txt','r')
 out = open('dico.txt','w')
-
+keptword=[]
 lines = [line.rstrip('\n') for line in source]
 compt = 0
 N = len(lines)
-for i in range(N):
+for i in range(N-1):
     n = len(lines[i])
-    if n > 14 or n == 1:
-        del lines[i]
+    if n <= 10 and n != 1:
+        keptword.append(lines[i])
+        out.write(lines[i]+"\n")
         compt +=1
-    
+
+source.close()
+out.close()
